@@ -13,7 +13,7 @@ import logging as log
 from .variables import EXTENDED_NAMED_COLORS, CSS_PROPS_TEXT
 
 
-__all__ = ['css_minify', 'condense_semicolons']
+__all__ = ('css_minify', 'condense_semicolons')
 
 
 def _compile_props(props_text, grouped=False):
