@@ -1,12 +1,9 @@
 # css-html-js-minify
 
 
-[![Travis report](https://travis-ci.org/juancarlospaco/css-html-js-minify.svg?branch=master "Travis-C.I. Testing report")](https://travis-ci.org/juancarlospaco/css-html-js-minify) [![GPL License](http://img.shields.io/badge/license-GPL-blue.svg?style=plastic)](http://opensource.org/licenses/GPL-3.0) [![LGPL License](http://img.shields.io/badge/license-LGPL-blue.svg?style=plastic)](http://opensource.org/licenses/LGPL-3.0) [![Python Version](https://img.shields.io/badge/Python-3-brightgreen.svg?style=plastic)](http://python.org) [![Code Issues](http://www.quantifiedcode.com/api/v1/project/abb1afb550964afa8d1e30c82367eb24/badge.svg)](http://www.quantifiedcode.com/app/project/abb1afb550964afa8d1e30c82367eb24)
+[![Travis report](https://travis-ci.org/juancarlospaco/css-html-js-minify.svg?branch=master "Travis-C.I. Testing report")](https://travis-ci.org/juancarlospaco/css-html-js-minify) [![GPL License](http://img.shields.io/badge/license-GPL-blue.svg?style=plastic)](http://opensource.org/licenses/GPL-3.0) [![LGPL License](http://img.shields.io/badge/license-LGPL-blue.svg?style=plastic)](http://opensource.org/licenses/LGPL-3.0) [![Python Version](https://img.shields.io/badge/Python-3-brightgreen.svg?style=plastic)](http://python.org)
 
-[![Donate BitCoins](https://www.coinbase.com/assets/buttons/donation_large-5cf4f17cc2d2ae2f45b6b021ee498297409c94dcf0ba1bbf76fd5668e80b0d02.png)](https://www.coinbase.com/checkouts/c3538d335faee0c30c81672ea0223877 "Donate Bitcoins") [![Subscribe with BitCoins](https://www.coinbase.com/assets/buttons/subscription_large-11d991f628216af05156fae88a48ce25c0cb36447a265421a43a62e572af3853.png)](https://www.coinbase.com/checkouts/c3538d335faee0c30c81672ea0223877 "Subscribe with BitCoins") [![Pay with BitCoins](https://www.coinbase.com/assets/buttons/buy_now_large-6f15fa5979d25404827a7329e8a5ec332a42cf4fd73e27a2c3ccda017034e1b0.png)](https://www.coinbase.com/checkouts/c3538d335faee0c30c81672ea0223877 "Pay with BitCoins") [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif "Donate with or without Credit Card")](http://goo.gl/cB7PR)
-
-
-- **StandAlone Async cross-platform Unicode-ready Python3-ready Minifier for the Web.**
+- StandAlone Async cross-platform Minifier for the Web.
 
 https://pypi.python.org/pypi/css-html-js-minify
 
@@ -65,7 +62,7 @@ runs.
 - `*.css` files are saved as `*.min.css`, `*.js` are saved as `*.min.js`, `*.htm` are saved as `*.html`
 
 
-# Screenshots:
+# Screenshots
 
 **Linux:**
 
@@ -82,7 +79,7 @@ runs.
 ![screenshot](https://raw.githubusercontent.com/juancarlospaco/css-html-js-minify/master/windows-css-html-js-compressor.jpg "MS Windows 32bit/64bit Python2/Python3")
 
 
-# Command-line usage:
+# Command-line usage
 
 ```bash
 css-html-js-minify.py file.htm
@@ -94,7 +91,7 @@ css-html-js-minify.py file.js
 css-html-js-minify.py /project/static/
 ```
 
-# Python code usage (py3.5+)
+# Python code usage
 
 ```python
 from css_html_js_minify import process_single_html_file, process_single_js_file, process_single_css_file, html_minify, js_minify, css_minify
@@ -117,21 +114,76 @@ css_minify('body {width: 50px;}\np {margin-top: 1em;/* hi */  }', comments=False
 The optional arguments that these functions take are almost the same as the command-line flags.
 Check the list above *(just use add_hash instead of hash)*. Additionally, you can force a specific path for the output files using ``output_path``.
 
-# Install permanently on the system:
 
-**PIP:** *(Recommended!)*
+# Install
+
 ```
-sudo pip3 install css-html-js-minify
+pip install css-html-js-minify
 ```
+Uninstall `pip uninstall css-html-js-minify`
 
 
-# Why?:
+# Why?
 
 - **Why another Compressor ?**, there are lots of compressors for web files out there!; *Or maybe not ?*.
 - Many of them only work inside Django/Flask, or frameworks of PHP/Java/Ruby, or can not process whole folders.
 - This project is the big brother of another project that does the inverse, a [Beautifier for the Web.](https://github.com/juancarlospaco/css-html-prettify#css-html-prettify)
 
+
+# Migration
+
+To keep things simple [KISS](http://en.wikipedia.org/wiki/KISS_principle), the human readable indented commented hackable HTML is kept as `*.htm` and the compressed production-ready as `*.html`. This is inspired from JavaScript/CSS `*.min.js` and `*.min.css`. [We did not "invent" this file extension.](http://en.wikipedia.org/wiki/HTM)
+
+To migrate from typical file extension HTML to HTM, which is the exactly same, you can run this:
+
+```shell
+find . -name "*.html" -exec rename "s/.html/.htm/" "{}" \;
+```
+
+This will make a copy of all `*.html` renaming them as `*.htm` recursively from the current folder. Nothing deleted.
+
+
+# Requisites
+
+- [Python 3.6+](https://www.python.org "Python Homepage")
+
+
+# Coding Style Guide
+
+- Lint, [PEP-8](https://www.python.org/dev/peps/pep-0008), [PEP-257](https://www.python.org/dev/peps/pep-0257), [iSort](https://github.com/timothycrosley/isort) must Pass Ok. `pip install pep8 isort`
+- If there are any kind of tests, they must pass. No tests is also acceptable, but having tests is better.
+
+
+# JavaScript support
+
+- ES6 and ES7 and future standards may not be fully supported since they change quickly, mainly driven by Node.JS releases.
+- Future JavaScript support is orphan, if you want to make ES6, ES7 work feel free to send pull request, we will merge it.
+
+
+# Contributors
+
+- **Please Star this Repo on Github !**, it helps to show up faster on searchs.
+- [Help](https://help.github.com/articles/using-pull-requests) and more [Help](https://help.github.com/articles/fork-a-repo) and Interactive Quick [Git Tutorial](https://try.github.io).
+
+
+# Licence
+
+- GNU GPL Latest Version *AND* GNU LGPL Latest Version *AND* any Licence [YOU Request via Bug Report](https://github.com/juancarlospaco/css-html-js-minify/issues/new).
+
+This work is free software:
+You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This work is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+Without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this work.
+
+
+# Example
+
+<details>
+
 **Input CSS:**
+
 ```css
 /*!
  * preserve commment
@@ -173,69 +225,10 @@ sudo pip3 install css-html-js-minify
 /*!* preserve commment */ .class,#NotHex,input[type=text],a:hover{font-family:Helvetica Neue,Arial,Helvetica,'Liberation Sans',sans-serif;border:0;margin:0;border-color:#f0f;color:#00fa9a;background-position:0 0;transform-origin:0 0;margin:0 !important;font-weight:700;color:#fff;padding:.9px;position:absolute;z-index:100000;color:#000;background-color:#FFF;background-image:url(data:image/jpg;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=)}
 ```
 
-
-# Migration:
-
-To keep things simple [KISS](http://en.wikipedia.org/wiki/KISS_principle), the human readable indented commented hackable HTML is kept as `*.htm` and the compressed production-ready as `*.html`. This is inspired from JavaScript/CSS `*.min.js` and `*.min.css`. [We did not "invent" this file extension.](http://en.wikipedia.org/wiki/HTM)
-
-To migrate from typical file extension HTML to HTM, which is the exactly same, you can run this:
-
-```shell
-find . -name "*.html" -exec rename "s/.html/.htm/" "{}" \;
-```
-
-This will make a copy of all `*.html` renaming them as `*.htm` recursively from the current folder. Nothing deleted.
+</details>
 
 
-# Requisites:
+# Ethics and Humanism Policy
 
-- [Python 3.x](https://www.python.org "Python Homepage")
-
-
-# Coding Style Guide:
-
-- Lint, [PEP-8](https://www.python.org/dev/peps/pep-0008), [PEP-257](https://www.python.org/dev/peps/pep-0257), [PyLama](https://github.com/klen/pylama#-pylama), [iSort](https://github.com/timothycrosley/isort) must Pass Ok. `pip install pep8 pep257 pylama isort`
-- If there are any kind of tests, they must pass. No tests is also acceptable, but having tests is better.
-
-
-# JavaScript support
-
-- ES6 and ES7 and future standards may not be fully supported since they change quickly, mainly driven by Node.JS releases.
-- Future JavaScript support is orphan, if you want to make ES6, ES7 work feel free to send pull request, we will merge it.
-
-
-# Contributors:
-
-| **Hall of Fame** |
-| -------------------------------- |
-| [![](https://avatars1.githubusercontent.com/u/1189414?s=50)](https://github.com/juancarlospaco) [![](https://avatars2.githubusercontent.com/u/3127847?s=50)](https://github.com/cassiobotaro) [![](https://avatars1.githubusercontent.com/u/5056390?s=50)](https://github.com/loggerhead) [![](https://avatars3.githubusercontent.com/u/7449642?s=50)](https://github.com/skolsuper) [![](https://avatars0.githubusercontent.com/u/4732915?s=50)](https://github.com/cuducos) [![](https://avatars1.githubusercontent.com/u/517395?s=50)](https://github.com/lowks) [![](https://avatars3.githubusercontent.com/u/6242660?s=50)](https://github.com/alanvinals) [![](https://avatars2.githubusercontent.com/u/1552641?s=50)](https://github.com/JayXon) [![](https://avatars1.githubusercontent.com/u/6053065?s=50)](https://github.com/rokarc) [???](https://github.com/Omniferum) [![](https://avatars1.githubusercontent.com/u/1486592?v=3&s=50)](https://github.com/harrysouthworth) [![](https://avatars2.githubusercontent.com/u/6442863?v=3&s=50)](https://github.com/mverleg)
-[![](https://avatars0.githubusercontent.com/u/1102886?v=3&s=50)](https://github.com/Aeyoun) |
-
-
-- **Please Star this Repo on Github !**, it helps to show up faster on searchs.
-- **Ad-Hocracy Meritocracy**: 3 Pull Requests Merged on Master you become Repo Admin. *Join us!*
-- [Help](https://help.github.com/articles/using-pull-requests) and more [Help](https://help.github.com/articles/fork-a-repo) and Interactive Quick [Git Tutorial](https://try.github.io).
-
-
-# Licence:
-
-- GNU GPL Latest Version *AND* GNU LGPL Latest Version *AND* any Licence [YOU Request via Bug Report](https://github.com/juancarlospaco/css-html-js-minify/issues/new).
-
-This work is free software: 
-You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-This work is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-Without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this work.
-
-
-# Ethics and Humanism Policy:
 - May this FLOSS be always Pristine and Clean, No AdWare, No Spamm, No BundleWare, No Infomercial, No MalWare.
 - This project is [LGBTQQIAAP friendly](http://www.urbandictionary.com/define.php?term=LGBTQQIAAP "Whats LGBTQQIAAP").
-
-
-Donate, Charityware :
----------------------
-
-- [Charityware](https://en.wikipedia.org/wiki/Donationware) is a licensing model that supplies fully operational unrestricted software to the user and requests an optional donation be paid to a third-party beneficiary non-profit. The amount may be left to discretion of the user.
-- If you want to Donate please [click here](http://www.icrc.org/eng/donations/index.jsp) or [click here](http://www.atheistalliance.org/support-aai/donate) or [click here](http://www.msf.org/donate) or [click here](http://richarddawkins.net/) or [click here](http://www.supportunicef.org/) or [click here](http://www.amnesty.org/en/donate) or [click here](http://www.rescue.org/irc-fast-facts)
