@@ -32,6 +32,9 @@ from anglerfish import (check_encoding, check_folder, make_logger,
                         set_terminal_title)
 
 
+__all__ = ('process_multiple_files', 'prefixer_extensioner', 'prepare',
+           'process_single_css_file', 'process_single_html_file',
+           'process_single_js_file', 'make_arguments_parser', 'main')
 start_time = datetime.now()
 
 
