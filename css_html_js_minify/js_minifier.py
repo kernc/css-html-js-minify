@@ -12,7 +12,7 @@ import logging as log
 from .css_minifier import condense_semicolons
 
 
-__all__ = ['js_minify']
+__all__ = ('js_minify', )
 
 
 def remove_commented_lines(js):
