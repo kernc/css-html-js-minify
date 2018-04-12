@@ -5,6 +5,9 @@
 """Variables for CSS processing for CSS-HTML-JS-Minify."""
 
 
+__all__ = ('EXTENDED_NAMED_COLORS', 'CSS_PROPS_TEXT')
+
+
 # 'Color Name String': (R, G, B)
 EXTENDED_NAMED_COLORS = {
     'azure': (240, 255, 255),
