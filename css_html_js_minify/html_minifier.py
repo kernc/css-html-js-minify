@@ -10,7 +10,7 @@ import re
 import logging as log
 
 
-__all__ = ['html_minify']
+__all__ = ('html_minify', )
 
 
 def condense_html_whitespace(html):
