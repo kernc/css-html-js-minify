@@ -58,10 +58,10 @@ class ZipApp(Command):
 
 
 setup(
-    install_requires=['anglerfish'],css-html-js-minify.py
+    install_requires=['anglerfish'],
     setup_requires=['anglerfish'],
     tests_require=['anglerfish'],
-    requires=['anglerfish'],css-html-js-minify.py
+    requires=['anglerfish'],
 
     # scripts=['css-html-js-minify.py'],  # uncomment if want install as script
 
