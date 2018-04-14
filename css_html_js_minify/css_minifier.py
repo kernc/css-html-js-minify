@@ -8,8 +8,6 @@
 import re
 import itertools
 
-import logging as log
-
 from .variables import EXTENDED_NAMED_COLORS, CSS_PROPS_TEXT
 
 
@@ -78,7 +76,6 @@ def sort_properties(css_unsorted_string):
     sort it by defined rule, and return sorted buffer if it's CSS property.
     This function depends on '_prioritify' function.
     """
-    log.debug("Alphabetically Sorting all CSS / SCSS Properties.")
     css_pgs = _compile_props(CSS_PROPS_TEXT, grouped=False)  # Do Not Group.
     pattern = re.compile(r'(.*?{\r?\n?)(.*?)(}.*?)|(.*)',
                          re.DOTALL + re.MULTILINE)
@@ -102,7 +99,6 @@ def sort_properties(css_unsorted_string):
 
 def remove_comments(css):
     """Remove all CSS comment blocks."""
-    log.debug("Removing all Comments.")
     iemac, preserve = False, False
     comment_start = css.find("/*")
     while comment_start >= 0:  # Preserve comments that look like `/*!...*/`.
@@ -132,7 +128,6 @@ def remove_comments(css):
 
 def remove_unnecessary_whitespace(css):
     """Remove unnecessary whitespace characters."""
-    log.debug("Removing all unnecessary white spaces.")
 
     def pseudoclasscolon(css):
         """Prevent 'p :link' from becoming 'p:link'.
@@ -168,19 +163,16 @@ def remove_unnecessary_whitespace(css):
 
 def remove_unnecessary_semicolons(css):
     """Remove unnecessary semicolons."""
-    log.debug("Removing all unnecessary semicolons.")
     return re.sub(r";+\}", "}", css)
 
 
 def remove_empty_rules(css):
     """Remove empty rules."""
-    log.debug("Removing all unnecessary empty rules.")
     return re.sub(r"[^\}\{]+\{\}", "", css)
 
 
 def normalize_rgb_colors_to_hex(css):
     """Convert `rgb(51,102,153)` to `#336699`."""
-    log.debug("Converting all rgba to hexadecimal color values.")
     regex = re.compile(r"rgb\s*\(\s*([0-9,\s]+)\s*\)")
     match = regex.search(css)
     while match:
@@ -193,14 +185,12 @@ def normalize_rgb_colors_to_hex(css):
 
 def condense_zero_units(css):
     """Replace `0(px, em, %, etc)` with `0`."""
-    log.debug("Condensing all zeroes on values.")
     return re.sub(r"([\s:])(0)(px|em|%|in|q|ch|cm|mm|pc|pt|ex|rem|s|ms|"
                   r"deg|grad|rad|turn|vw|vh|vmin|vmax|fr)", r"\1\2", css)
 
 
 def condense_multidimensional_zeros(css):
     """Replace `:0 0 0 0;`, `:0 0 0;` etc. with `:0;`."""
-    log.debug("Condensing all multidimensional zeroes on values.")
     return css.replace(":0 0 0 0;", ":0;").replace(
         ":0 0 0;", ":0;").replace(":0 0;", ":0;").replace(
             "background-position:0;", "background-position:0 0;").replace(
@@ -209,13 +199,11 @@ def condense_multidimensional_zeros(css):
 
 def condense_floating_points(css):
     """Replace `0.6` with `.6` where possible."""
-    log.debug("Condensing all floating point values.")
     return re.sub(r"(:|\s)0+\.(\d+)", r"\1.\2", css)
 
 
 def condense_hex_colors(css):
     """Shorten colors from #AABBCC to #ABC where possible."""
-    log.debug("Condensing all hexadecimal color values.")
     regex = re.compile(
         r"""([^\"'=\s])(\s*)#([0-9a-f])([0-9a-f])([0-9a-f])"""
         r"""([0-9a-f])([0-9a-f])([0-9a-f])""", re.I | re.S)
@@ -234,19 +222,16 @@ def condense_hex_colors(css):
 
 def condense_whitespace(css):
     """Condense multiple adjacent whitespace characters into one."""
-    log.debug("Condensing all unnecessary white spaces.")
     return re.sub(r"\s+", " ", css)
 
 
 def condense_semicolons(css):
     """Condense multiple adjacent semicolon characters into one."""
-    log.debug("Condensing all unnecessary multiple adjacent semicolons.")
     return re.sub(r";;+", ";", css)
 
 
 def wrap_css_lines(css, line_length=80):
     """Wrap the lines of the given CSS to an approximate length."""
-    log.debug("Wrapping lines to ~{0} max line lenght.".format(line_length))
     lines, line_start = [], 0
     for i, char in enumerate(css):
         # Its safe to break after } characters.
@@ -260,14 +245,12 @@ def wrap_css_lines(css, line_length=80):
 
 def condense_font_weight(css):
     """Condense multiple font weights into shorter integer equals."""
-    log.debug("Condensing font weights on values.")
     return css.replace('font-weight:normal;', 'font-weight:400;').replace(
         'font-weight:bold;', 'font-weight:700;')
 
 
 def condense_std_named_colors(css):
     """Condense named color values to shorter replacement using HEX."""
-    log.debug("Condensing standard named color values.")
     for color_name, color_hexa in iter(tuple({
         ':aqua;': ':#0ff;', ':blue;': ':#00f;',
             ':fuchsia;': ':#f0f;', ':yellow;': ':#ff0;'}.items())):
@@ -277,7 +260,6 @@ def condense_std_named_colors(css):
 
 def condense_xtra_named_colors(css):
     """Condense named color values to shorter replacement using HEX."""
-    log.debug("Condensing extended named color values.")
     for k, v in iter(tuple(EXTENDED_NAMED_COLORS.items())):
         same_color_but_rgb = 'rgb({0},{1},{2})'.format(v[0], v[1], v[2])
         if len(k) > len(same_color_but_rgb):
@@ -287,19 +269,16 @@ def condense_xtra_named_colors(css):
 
 def remove_url_quotes(css):
     """Fix for url() does not need quotes."""
-    log.debug("Removing quotes from url.")
     return re.sub(r'url\((["\'])([^)]*)\1\)', r'url(\2)', css)
 
 
 def condense_border_none(css):
     """Condense border:none; to border:0;."""
-    log.debug("Condense borders values.")
     return css.replace("border:none;", "border:0;")
 
 
 def add_encoding(css):
     """Add @charset 'UTF-8'; if missing."""
-    log.debug("Adding encoding declaration if needed.")
     return '@charset "utf-8";' + css if "@charset" not in css.lower() else css
 
 
@@ -312,13 +291,11 @@ def restore_needed_space(css):
 
 def unquote_selectors(css):
     """Fix CSS for some specific selectors where Quotes is not needed."""
-    log.debug("Removing unnecessary Quotes on selectors of CSS classes.")
     return re.compile('([a-zA-Z]+)="([a-zA-Z0-9-_\.]+)"]').sub(r'\1=\2]', css)
 
 
 def css_minify(css, wrap=False, comments=False, sort=False, noprefix=False):
     """Minify CSS main function."""
-    log.info("Compressing CSS...")
     css = remove_comments(css) if not comments else css
     css = sort_properties(css) if sort else css
     css = unquote_selectors(css)
@@ -339,5 +316,4 @@ def css_minify(css, wrap=False, comments=False, sort=False, noprefix=False):
     css = condense_semicolons(css)
     css = add_encoding(css) if not noprefix else css
     css = restore_needed_space(css)
-    log.info("Finished compressing CSS !.")
     return css.strip()
