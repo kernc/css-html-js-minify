@@ -26,16 +26,10 @@ from .css_minifier import css_minify
 from .html_minifier import html_minify
 from .js_minifier import js_minify
 
-from anglerfish import (check_encoding, check_folder, make_logger,
-                        make_post_exec_msg, set_process_name,
-                        set_single_instance, walk2list, beep,
-                        set_terminal_title)
 
-
-__all__ = ('process_multiple_files', 'prefixer_extensioner', 'prepare',
+__all__ = ('process_multiple_files', 'prefixer_extensioner',
            'process_single_css_file', 'process_single_html_file',
            'process_single_js_file', 'make_arguments_parser', 'main')
-start_time = datetime.now()
 
 
 ##############################################################################
@@ -45,18 +39,17 @@ def process_multiple_files(file_path, watch=False, wrap=False, timestamp=False,
                            comments=False, sort=False, overwrite=False,
                            zipy=False, prefix='', add_hash=False):
     """Process multiple CSS, JS, HTML files with multiprocessing."""
-    log.debug("Process {} is Compressing {}.".format(os.getpid(), file_path))
+    print(f"Process {os.getpid()} is Compressing {file_path}.")
     if watch:
         previous = int(os.stat(file_path).st_mtime)
-        log.info("Process {} is Watching {}.".format(os.getpid(), file_path))
+        print(f"Process {os.getpid()} is Watching {file_path}.")
         while True:
             actual = int(os.stat(file_path).st_mtime)
             if previous == actual:
                 sleep(60)
             else:
                 previous = actual
-                log.debug("Modification detected on {0}.".format(file_path))
-                check_folder(os.path.dirname(file_path))
+                print(f"Modification detected on {file_path}.")
                 if file_path.endswith(".css"):
                     process_single_css_file(
                         file_path, wrap=wrap, timestamp=timestamp,
@@ -95,13 +88,13 @@ def prefixer_extensioner(file_path, old, new,
     >>> prefixer_extensioner('/tmp/test.js', '.js', '.min.js')
     '/tmp/test.min.js'
     """
-    log.debug("Prepending '{}' Prefix to {}.".format(new.upper(), file_path))
+    print(f"Prepending '{new.upper()}' Prefix to {file_path}.")
     extension = os.path.splitext(file_path)[1].lower().replace(old, new)
     filenames = os.path.splitext(os.path.basename(file_path))[0]
     filenames = prefix + filenames if prefix else filenames
     if add_hash and file_content:  # http://stackoverflow.com/a/25568916
         filenames += "-" + sha1(file_content.encode("utf-8")).hexdigest()[:11]
-        log.debug("Appending SHA1 HEX-Digest Hash to '{}'.".format(file_path))
+        print(f"Appending SHA1 HEX-Digest Hash to '{file_path}'.")
     dir_names = os.path.dirname(file_path)
     file_path = os.path.join(dir_names, filenames + extension)
     return file_path
@@ -112,10 +105,10 @@ def process_single_css_file(css_file_path, wrap=False, timestamp=False,
                             zipy=False, prefix='', add_hash=False,
                             output_path=None):
     """Process a single CSS file."""
-    log.info("Processing CSS file: {0}.".format(css_file_path))
+    print(f"Processing CSS file: {css_file_path}.")
     with open(css_file_path, encoding="utf-8") as css_file:
         original_css = css_file.read()
-    log.debug("INPUT: Reading CSS file {}.".format(css_file_path))
+    print(f"INPUT: Reading CSS file {css_file_path}.")
     minified_css = css_minify(original_css, wrap=wrap,
                               comments=comments, sort=sort)
     if timestamp:
@@ -130,7 +123,7 @@ def process_single_css_file(css_file_path, wrap=False, timestamp=False,
                 css_file_path, ".css",
                 ".css.gz" if overwrite else ".min.css.gz", original_css,
                 prefix=prefix, add_hash=add_hash)
-            log.debug("OUTPUT: Writing ZIP CSS {}.".format(gz_file_path))
+            print(f"OUTPUT: Writing ZIP CSS {gz_file_path}.")
     else:
         min_css_file_path = gz_file_path = output_path
     if not zipy or output_path is None:
@@ -140,17 +133,17 @@ def process_single_css_file(css_file_path, wrap=False, timestamp=False,
     if zipy:
         with gzip.open(gz_file_path, "wt", encoding="utf-8") as output_gz:
             output_gz.write(minified_css)
-    log.debug("OUTPUT: Writing CSS Minified {0}.".format(min_css_file_path))
+    print(f"OUTPUT: Writing CSS Minified {min_css_file_path}.")
     return min_css_file_path
 
 
 def process_single_html_file(html_file_path, comments=False, overwrite=False,
                              prefix='', add_hash=False, output_path=None):
     """Process a single HTML file."""
-    log.info("Processing HTML file: {0}.".format(html_file_path))
+    print(f"Processing HTML file: {html_file_path}.")
     with open(html_file_path, encoding="utf-8") as html_file:
         minified_html = html_minify(html_file.read(), comments=comments)
-    log.debug("INPUT: Reading HTML file {0}.".format(html_file_path))
+    print(f"INPUT: Reading HTML file {html_file_path}.")
     if output_path is None:
         html_file_path = prefixer_extensioner(
             html_file_path, ".html" if overwrite else ".htm", ".html",
@@ -159,17 +152,17 @@ def process_single_html_file(html_file_path, comments=False, overwrite=False,
         html_file_path = output_path
     with open(html_file_path, "w", encoding="utf-8") as output_file:
         output_file.write(minified_html)
-    log.debug("OUTPUT: Writing HTML Minified {0}.".format(html_file_path))
+    print(f"OUTPUT: Writing HTML Minified {html_file_path}.")
     return html_file_path
 
 
 def process_single_js_file(js_file_path, timestamp=False, overwrite=False,
                            zipy=False, output_path=None):
     """Process a single JS file."""
-    log.info("Processing JS file: {0}.".format(js_file_path))
+    print(f"Processing JS file: {js_file_path}.")
     with open(js_file_path, encoding="utf-8") as js_file:
         original_js = js_file.read()
-    log.debug("INPUT: Reading JS file {0}.".format(js_file_path))
+    print(f"INPUT: Reading JS file {js_file_path}.")
     minified_js = js_minify(original_js)
     if timestamp:
         taim = "/* {} */ ".format(datetime.now().isoformat()[:-7].lower())
@@ -182,7 +175,7 @@ def process_single_js_file(js_file_path, timestamp=False, overwrite=False,
             gz_file_path = prefixer_extensioner(
                 js_file_path, ".js", ".js.gz" if overwrite else ".min.js.gz",
                 original_js)
-            log.debug("OUTPUT: Writing ZIP JS {}.".format(gz_file_path))
+            print(f"OUTPUT: Writing ZIP JS {gz_file_path}.")
     else:
         min_js_file_path = gz_file_path = output_path
     if not zipy or output_path is None:
@@ -192,7 +185,7 @@ def process_single_js_file(js_file_path, timestamp=False, overwrite=False,
     if zipy:
         with gzip.open(gz_file_path, "wt", encoding="utf-8") as output_gz:
             output_gz.write(minified_js)
-    log.debug("OUTPUT: Writing JS Minified {0}.".format(min_js_file_path))
+    print(f"OUTPUT: Writing JS Minified {min_js_file_path}.")
     return min_js_file_path
 
 
@@ -232,30 +225,27 @@ def make_arguments_parser():
     parser.add_argument('--watch', action='store_true', help="Watch changes.")
     parser.add_argument('--multiple', action='store_true',
                         help="Allow Multiple instances (Not Recommended).")
-    parser.add_argument('--beep', action='store_true',
-                        help="Beep sound will be played when it ends at exit.")
     return parser.parse_args()
 
 
-def prepare():
-    """Prepare basic setup for main loop running."""
-    global log
-    log = make_logger("css-html-js-minify", emoji=True)  # Make a Logger Log.
-    set_terminal_title("css-html-js-minify")
-    check_encoding()  # AutoMagically Check Encodings/root
-    set_process_name("css-html-js-minify")  # set Name
-    set_single_instance("css-html-js-minify")  # set Single Instance
-    return log
+def walk2list(folder: str, target: tuple, omit: tuple=(),
+              showhidden: bool=False, topdown: bool=True,
+              onerror: object=None, followlinks: bool=False) -> tuple:
+    """Perform full walk, gather full path of all files."""
+    oswalk = os.walk(folder, topdown=topdown,
+                     onerror=onerror, followlinks=followlinks)
+
+    return [os.path.abspath(os.path.join(r, f))
+            for r, d, fs in oswalk
+            for f in fs if not f.startswith(() if showhidden else ".") and
+            not f.endswith(omit) and f.endswith(target)]
 
 
 def main():
     """Main Loop."""
     args = make_arguments_parser()
-    log.disable(log.CRITICAL) if args.quiet else log.debug("Max Logging ON")
-    check_folder(os.path.dirname(args.fullpath))
-    atexit.register(beep) if args.beep else log.debug("Beep sound at exit OFF")
     if os.path.isfile(args.fullpath) and args.fullpath.endswith(".css"):
-        log.info("Target is a CSS File.")  # Work based on if argument is
+        print("Target is a CSS File.")  # Work based on if argument is
         list_of_files = str(args.fullpath)  # file or folder, folder is slower.
         process_single_css_file(
             args.fullpath, wrap=args.wrap, timestamp=args.timestamp,
@@ -263,25 +253,25 @@ def main():
             zipy=args.zipy, prefix=args.prefix, add_hash=args.hash)
     elif os.path.isfile(args.fullpath) and args.fullpath.endswith(
             ".html" if args.overwrite else ".htm"):
-        log.info("Target is HTML File.")
+        print("Target is HTML File.")
         list_of_files = str(args.fullpath)
         process_single_html_file(
             args.fullpath, comments=args.comments,
             overwrite=args.overwrite, prefix=args.prefix, add_hash=args.hash)
     elif os.path.isfile(args.fullpath) and args.fullpath.endswith(".js"):
-        log.info("Target is a JS File.")
+        print("Target is a JS File.")
         list_of_files = str(args.fullpath)
         process_single_js_file(
             args.fullpath, timestamp=args.timestamp,
             overwrite=args.overwrite, zipy=args.zipy)
     elif os.path.isdir(args.fullpath):
-        log.info("Target is a Folder with CSS, HTML, JS files !.")
-        log.warning("Processing a whole Folder may take some time...")
+        print("Target is a Folder with CSS, HTML, JS files !.")
+        print("Processing a whole Folder may take some time...")
         list_of_files = walk2list(
             args.fullpath,
             (".css", ".js", ".html" if args.overwrite else ".htm"),
             (".min.css", ".min.js", ".htm" if args.overwrite else ".html"))
-        log.info('Total Maximum CPUs used: ~{0} Cores.'.format(cpu_count()))
+        print(f'Total Maximum CPUs used: ~{cpu_count()} Cores.')
         pool = Pool(cpu_count())  # Multiprocessing Async
         pool.map_async(partial(
                 process_multiple_files, watch=args.watch,
@@ -293,12 +283,10 @@ def main():
         pool.close()
         pool.join()
     else:
-        log.critical("File or folder not found,or cant be read,or I/O Error.")
+        print("File or folder not found,or cant be read,or I/O Error.")
         sys.exit(1)
     if args.after and getoutput:
-        log.info(getoutput(str(args.after)))
-    log.info('\n {0} \n Files Processed: {1}.'.format('-' * 80, list_of_files))
-    log.info('Number of Files Processed: {0}.'.format(
-        len(list_of_files) if isinstance(list_of_files, tuple) else 1))
-    set_terminal_title()
-    make_post_exec_msg(start_time)
+        print(getoutput(str(args.after)))
+    print(f'\n {"-" * 80} \n Files Processed: {list_of_files}.')
+    print(f'''Number of Files Processed:
+          {len(list_of_files) if isinstance(list_of_files, tuple) else 1}.''')
