@@ -28,10 +28,12 @@
 
 import os
 
-from setuptools import setup, Command
+from pathlib import Path
+from shutil import copytree, which
 from tempfile import TemporaryDirectory
-from shutil import copytree
 from zipapp import create_archive
+
+from setuptools import Command, setup
 
 
 ##############################################################################
@@ -39,7 +41,7 @@ from zipapp import create_archive
 
 
 class ZipApp(Command):
-    description, user_options = "Creates a zipapp.", []
+    description, user_options = "Creates a ZipApp.", []
 
     def initialize_options(self): pass  # Dont needed, but required.
 
@@ -47,21 +49,19 @@ class ZipApp(Command):
 
     def run(self):
         with TemporaryDirectory() as tmpdir:
-            copytree('.', os.path.join(tmpdir, 'css-html-js-minify'))
-            fyle = os.path.join(tmpdir, '__main__.py')
-            with open(fyle, 'w', encoding='utf-8') as entry:
-                entry.write("import runpy\nrunpy.run_module('css-html-js-minify')")
-            create_archive(tmpdir, 'css-html-js-minify.pyz', '/usr/bin/env python3', "css-html-js-minify")
+            copytree('.', Path(tmpdir) / 'css-html-js-minify')
+            (Path(tmpdir) / '__main__.py').write_text("import runpy\nrunpy.run_module('css-html-js-minify')")
+            create_archive(tmpdir, 'css-html-js-minify.pyz', which('python3'))
 
 
 ##############################################################################
 
 
 setup(
-    install_requires=['anglerfish'],
+    install_requires=['anglerfish'],css-html-js-minify.py
     setup_requires=['anglerfish'],
     tests_require=['anglerfish'],
-    requires=['anglerfish'],
+    requires=['anglerfish'],css-html-js-minify.py
 
     # scripts=['css-html-js-minify.py'],  # uncomment if want install as script
 
