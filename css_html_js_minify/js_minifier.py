@@ -5,6 +5,8 @@
 """JavaScript Minifier functions for CSS-HTML-JS-Minify."""
 
 
+import re
+
 from io import StringIO  # pure-Python StringIO supports unicode.
 
 import logging as log
