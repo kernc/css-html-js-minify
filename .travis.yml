@@ -6,9 +6,6 @@ python:
     - 3.7
 
 
-before_install: pip install anglerfish --quiet
-
-
 before_script: rm --recursive --force --verbose *.py[cod]
 
 
