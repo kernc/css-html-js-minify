@@ -205,7 +205,7 @@ def make_arguments_parser():
     SHA1 HEX-Digest 11 Chars Hash on Filenames is used for Server Cache.
     CSS Properties are Alpha-Sorted, to help spot cloned ones, Selectors not.
     Watch works for whole folders, with minimum of ~60 Secs between runs.""")
-    parser.add_argument('--version', action='version', version=css_html_js_minify.__version__)
+    # parser.add_argument('--version', action='version', version=css_html_js_minify.__version__)
     parser.add_argument('fullpath', metavar='fullpath', type=str,
                         help='Full path to local file or folder.')
     parser.add_argument('--wrap', action='store_true',
