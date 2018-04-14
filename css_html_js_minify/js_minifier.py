@@ -9,8 +9,6 @@ import re
 
 from io import StringIO  # pure-Python StringIO supports unicode.
 
-import logging as log
-
 from .css_minifier import condense_semicolons
 
 
@@ -19,7 +17,6 @@ __all__ = ('js_minify', )
 
 def remove_commented_lines(js):
     """Force remove commented out lines from Javascript."""
-    log.debug("Force remove commented out lines from Javascript.")
     result = ""
     for line in js.splitlines():
         line = re.sub(r"/\*.*\*/" ,"" ,line) # (/*COMMENT */)
@@ -30,7 +27,6 @@ def remove_commented_lines(js):
 
 def simple_replacer_js(js):
     """Force strip simple replacements from Javascript."""
-    log.debug("Force strip simple replacements from Javascript.")
     return condense_semicolons(js.replace("debugger;", ";").replace(
         ";}", "}").replace("; ", ";").replace(" ;", ";").rstrip("\n;"))
 
@@ -45,7 +41,6 @@ def js_minify_keep_comments(js):
 
 def force_single_line_js(js):
     """Force Javascript to a single line, even if need to add semicolon."""
-    log.debug("Forcing JS from ~{0} to 1 Line.".format(len(js.splitlines())))
     return ";".join(js.splitlines()) if len(js.splitlines()) > 1 else js
 
 
