@@ -300,7 +300,7 @@ def condense_border_none(css):
 def add_encoding(css):
     """Add @charset 'UTF-8'; if missing."""
     log.debug("Adding encoding declaration if needed.")
-    return "@charset utf-8;" + css if "@charset" not in css.lower() else css
+    return '@charset "utf-8";' + css if "@charset" not in css.lower() else css
 
 
 def restore_needed_space(css):
