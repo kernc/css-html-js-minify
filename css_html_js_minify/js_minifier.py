@@ -172,6 +172,8 @@ class JavascriptMinify(object):
 
 def js_minify(js):
     """Minify a JavaScript string."""
+    print("""Future JavaScript support is orphan and not supported!.
+          If you want to make ES6, ES7 work feel free to send pull requests.")
     js = remove_commented_lines(js)
     js = js_minify_keep_comments(js)
     return js.strip()
