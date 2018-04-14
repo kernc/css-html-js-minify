@@ -33,7 +33,6 @@ def simple_replacer_js(js):
 
 def js_minify_keep_comments(js):
     """Return a minified version of the Javascript string."""
-    log.info("Compressing Javascript...")
     ins, outs = StringIO(js), StringIO()
     JavascriptMinify(ins, outs).minify()
     return force_single_line_js(outs.getvalue())
