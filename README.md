@@ -38,7 +38,6 @@ optional arguments:
   --before BEFORE  Command to execute before run (Experimental).
   --watch          Re-Compress if file changes (Experimental).
   --multiple       Allow Multiple instances (Not Recommended).
-  --beep           Beep sound will be played when it ends at exit.
 
 CSS-HTML-JS-Minify: Takes a file or folder full path string and process all
 CSS/HTML/JS found. If argument is not file/folder will fail. Check Updates
