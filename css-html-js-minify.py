@@ -8,7 +8,7 @@ StandAlone Async cross-platform no-dependency Minifier for the Web.
 """
 
 
-from css_html_js_minify.minify import prepare, main
+from css_html_js_minify.minify import main
 
 
 if __name__ in '__main__':
