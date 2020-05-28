@@ -140,6 +140,6 @@ def html_minify(html, comments=False):
     html = condense_style(html)
     html = condense_script(html)
     html = clean_unneeded_html_tags(html)
-    html = condense_html_whitespace(html)
     html = unquote_html_attributes(html)
+    html = condense_html_whitespace(html)
     return html.strip()
